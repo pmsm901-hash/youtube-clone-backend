@@ -24,11 +24,15 @@ const channelSchema=mongoose.Schema(
     subscribers:{
         type:Number,
         default:0
+    },
+    videos:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Video"
     }
 },
 {
     timestamp:true
 }
-
-)
-export default mongoose.model("Channel",channelSchema);
+);
+const Channel= mongoose.model("Channel",channelSchema);
+export default Channel;

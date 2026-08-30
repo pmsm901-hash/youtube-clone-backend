@@ -20,6 +20,12 @@ const videoSchema=mongoose.Schema(
             required:true
         },
         category:{
+            type:String,
+            required:true,
+            enum:["All","Music","Gaming","Coding","News","Sports","Education","Entertainment"]
+
+        },
+        channel:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Channel",
             required:true
@@ -34,12 +40,12 @@ const videoSchema=mongoose.Schema(
             default:0
         },
         likes:{
-            type:Number,
-            default:0
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
         },
         dislikes:{
-            type:Number,
-            default:0
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
         }
 
 
@@ -48,4 +54,5 @@ const videoSchema=mongoose.Schema(
     timestamps:true
 }
 );
-export default mongoose.model("Videos",videoSchema);
+const Video=mongoose.model("Video",videoSchema);
+export default Video;

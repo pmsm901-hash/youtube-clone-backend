@@ -24,12 +24,17 @@ const userSchema=mongoose.Schema(
     },
     avatar:{
         type:String,
-        default:""
+        default:"https://via.placeholder.com/150"
     },
+    channel:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Channel"
+    }
 },
 {
     timestamps:true
 }
 
 );
-export default mongoose.model("User",userSchema);
+const User= mongoose.model("User",userSchema);
+export default User;
