@@ -1,6 +1,6 @@
-import dotenv from dotenv;
-import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+// import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
 
 import connectDB from "../config/db.js";
 
@@ -10,7 +10,7 @@ import Video from "../models/videos.model.js";
 import Comment from "../models/comments.model.js";
 
 
-dotenv.config();
+// dotenv.config();
 
 const seedDatabase=async()=>{
     try
@@ -27,16 +27,17 @@ const seedDatabase=async()=>{
         const password=await bcrypt.hash("password123",10);
         
         //create user
-        const user1=await User.Create({username:"Puja",email:"pmsm901@gmail.com",password});
-        const user2=await User.Create({username:"Bhavesh",email:"bahvesh@gmail.com",password});
+        const user1=await User.create({username:"Puja",email:"pmsm901@gmail.com",password});
+        const user2=await User.create({username:"Bhavesh",email:"bahvesh@gmail.com",password});
 
         //create channel
-        const channel=await Channel.Create({channelName:"Code with Puja",owner:user1._id,description:"coding tutorials",channelBanner:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+        const channel=await Channel.create({channelName:"Code with Puja",owner:user1._id,description:"coding tutorials",channelBanner:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
             channelAvatar: "https://i.pravatar.cc/150?img=12",subscribers:5200
         });
 
         //add channel to user
-        user1.channels.push(channel._id);
+       // user1.channel.push(channel._id);
+       user1.channel=channel._id;
         //saving channel to user data into db
         await user1.save();
 

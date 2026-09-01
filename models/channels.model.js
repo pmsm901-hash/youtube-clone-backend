@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const channelSchema=mongoose.Schema(
 {
     channelName:{
-        type:string,
-        reuired:true,
+        type:String,
+        required:true,
         trim:true
 
     },
@@ -25,13 +25,14 @@ const channelSchema=mongoose.Schema(
         type:Number,
         default:0
     },
-    videos:{
+    videos:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Video"
-    }
+    }]
+
 },
 {
-    timestamp:true
+    timestamps:true
 }
 );
 const Channel= mongoose.model("Channel",channelSchema);
