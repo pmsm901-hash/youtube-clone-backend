@@ -62,7 +62,7 @@
         comment.text=text.trim();
         await comment.save();
         const updatedComment=await Comment.findById(comment._id).populate("user","username avatar");
-        res.json({success:true,message:"comment updated",comment:updateComment});
+        res.json({success:true,message:"comment updated",comment:updatedComment});
 
     }
     catch(error)

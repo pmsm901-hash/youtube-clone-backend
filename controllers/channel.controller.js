@@ -10,7 +10,7 @@ export const createChannel=async(req,res,next)=>{
     try
     {
         const {channelName,description,channelBanner,channelAvatar}=req.body;
-        if(!channelName)
+        if(!channelName?.trim())
         {
             return res.status(400).json({
                 success:false,
@@ -22,12 +22,19 @@ export const createChannel=async(req,res,next)=>{
         {
             return res.status(400).json({success:false,message:"You Already Have a Channel"});
         }
-        const channel=await Channel.create({channelName,description,channelBanner,channelAvatar,owner:req.user._id});
+        const channel=await Channel.create({
+            channelName:channelName.trim(),
+            description:description?.trim()||"",
+            channelBanner:channelBanner?.trim()||"",
+            channelAvatar:channelAvatar?.trim()||"",
+            owner:req.user._id
+        });
         await User.findByIdAndUpdate(req.user_id,{$push:{channels:channel._id}});
+        const populatedChannel=await Channel.findById(channel._id) .populate("owner","username avatar") .populate("videos");
         return res.status(200).json({
             success:true,
             message:"Channel Created",
-            channel
+            channel:populatedChannel
         });
     }
     catch(error)
@@ -41,8 +48,12 @@ export const createChannel=async(req,res,next)=>{
 export const getChannels=async(req,res,next)=>{
     try
     {
-        const channels=await Channel.find().populate("owner","username avatar");
-        res.json({success:true,count:channels.length,channels});
+        const channels=await Channel.find().populate("owner","username avatar").populate("videos");
+       return res.status(200).json({
+        success:true,
+        count:channels.length,
+        channels
+       })
     }
     catch(error)
     {
@@ -62,7 +73,10 @@ export const getChannels=async(req,res,next)=>{
                 message:"channel Not Found"
             });
         }
-        json.message({success:true,channel});
+       return res.status(200).json({
+        success:true,
+        channel
+       })
     }
     catch(error)
     {
@@ -98,7 +112,7 @@ export const getChannels=async(req,res,next)=>{
         channel.channelAvatar=channelAvatar ?? channel.channelAvatar;
 
         await channel.save();
-        res.json({
+        return res.status(200).json({
             success:true,
             message:"Channel Updated",
             channel
@@ -131,10 +145,12 @@ export const getChannels=async(req,res,next)=>{
             });
         }
         await Video.deleteMany({channel:channel._id});
-        await Video.findByIdAndDelete(channel._id);
         await Channel.findByIdAndDelete(channel._id);
         await User.findByIdAndUpdate(req.user._id,{$pull:{channels:channel._id}});
-        res.json({success:true,message:"channel deleted"});
+       return res.status(200).json({
+        success:true,
+        message:"channel deleted"
+       })
     }
     catch(error)
     {

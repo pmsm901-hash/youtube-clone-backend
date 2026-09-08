@@ -24,12 +24,12 @@ const userSchema=mongoose.Schema(
     },
     avatar:{
         type:String,
-        default:"https://via.placeholder.com/150"
+        default:"https://i.pravatar.cc/100"
     },
-    channel:{
+    channel:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Channel"
-    }
+    }]
 },
 {
     timestamps:true}

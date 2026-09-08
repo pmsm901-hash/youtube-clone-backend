@@ -39,14 +39,14 @@ const videoSchema=mongoose.Schema(
             type:Number,
             default:0
         },
-        likes:{
+        likes:[{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
-        },
-        dislikes:{
+        }],
+        dislikes:[{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
-        }
+        }]
 
 
 },
