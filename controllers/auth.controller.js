@@ -4,7 +4,7 @@ import User from "../models/users.model.js";
 
 //generating token
 const generateToken=(userId)=>{
-    return jwt.sign({userId},proccess.env.JWT_SECRET,{expiresIn:"7d"});
+    return jwt.sign({userId},process.env.JWT_SECRET,{expiresIn:"7d"});
     
 }
 
@@ -12,7 +12,7 @@ const generateToken=(userId)=>{
 export const registerUser=async(req,res,next)=>{
     try
     {
-        const{username,email,password}=req.body;
+        const{ username ,email ,password }=req.body;
         if(!username || !email || !password)
         {
             return res.status(400).json({
@@ -34,7 +34,7 @@ export const registerUser=async(req,res,next)=>{
                 message:"Password must contain at least 6 characters"
             })
         }
-        const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email))
         {
             return res.status(400).json({
@@ -43,7 +43,7 @@ export const registerUser=async(req,res,next)=>{
             });
         }
         const existingUser=await User.findOne({
-            email:email.toLowerCase()
+            email:email.toLowerCase().trim()
         });
 
         if(existingUser)
@@ -55,7 +55,7 @@ export const registerUser=async(req,res,next)=>{
         }
 
         const hashedPassword=await bcrypt.hash(password,10);
-        const user=await User.create({username,email:email.toLowerCase(),password:hashedPassword});
+        const user=await User.create({username:username.trim(),email:email.toLowerCase.trim().toLowerCase(),password:hashedPassword});
         res.status(201).json({success:true,message:"Registration Successful",
             user:{
                 id:user._id,username:user.username,email:user.email
@@ -73,7 +73,7 @@ export const registerUser=async(req,res,next)=>{
 export const loginUser= async(req,res,next)=>{
     try
     {
-        const{email,password}=req.body;
+        const{ email,password }=req.body;
         if(!email || !password)
         {
             return res.status(400).json({
@@ -82,7 +82,7 @@ export const loginUser= async(req,res,next)=>{
             });
         }
         const user=await User.findOne({
-            email:email.toLowerCase()
+            email:email.toLowerCase().trim()
         });
         if(!user)
         {
@@ -101,7 +101,7 @@ export const loginUser= async(req,res,next)=>{
         }
         const token=generateToken(user._id);
         res.json({success:true,message:"Login Successful",token,
-            user:{id:user._id,username:user.username,email:user.email,avatar:user,avatar}
+            user:{id:user._id,username:user.username,email:user.email,avatar:user.avatar}
         });
     }
     catch(error)
