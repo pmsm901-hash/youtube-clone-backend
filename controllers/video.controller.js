@@ -250,7 +250,13 @@ export const deleteVideo = async (req, res, next) => {
       });
     }
 
-    if (video.uploader.toString() !== req.user._id.toString()) {
+    if (!video.uploader) {
+      return res.status(400).json({
+        success: false,
+        message: "Video uploader is missing",
+      });
+    }
+     if (String(video.uploader) !== String(req.user._id)) {
       return res.status(403).json({
         success: false,
         message: "Not Authorized",
@@ -258,12 +264,15 @@ export const deleteVideo = async (req, res, next) => {
     }
 
     await Video.findByIdAndDelete(id);
-
-    await Channel.findByIdAndUpdate(video.channel, {
+    if(video.channel)
+    {
+       await Channel.findByIdAndUpdate(video.channel, {
       $pull: {
         videos: video._id,
       },
     });
+    }
+   
 
     return res.status(200).json({
       success: true,

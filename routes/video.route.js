@@ -21,7 +21,7 @@ router.post("/", protect, createVideo);
 //update video
 router.put("/:id", protect, updateVideo);
 //delete video
-router.delete("/:id", deleteVideo);
+router.delete("/:id",protect, deleteVideo);
 //liked video
 router.post("/:id/like", protect, likeVideo);
 //disliked video

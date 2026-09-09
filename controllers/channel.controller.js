@@ -26,7 +26,7 @@ export const createChannel = async (req, res, next) => {
       channelAvatar: channelAvatar?.trim() || "",
       owner: req.user._id,
     });
-    await User.findByIdAndUpdate(req.user_id, {
+    await User.findByIdAndUpdate(req.user._id, {
       $push: { channels: channel._id },
     });
     const populatedChannel = await Channel.findById(channel._id)

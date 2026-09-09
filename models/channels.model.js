@@ -10,11 +10,14 @@ const channelSchema = mongoose.Schema(
     description: {
       type: String,
       default: "",
+      trim:true,
     },
     channelBanner: {
       type: String,
       default: "",
+      trim:true,
     },
+    channelAvatar: { type: String, default: "", trim: true, },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
